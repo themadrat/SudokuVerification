@@ -84,11 +84,11 @@ public class PuzzleVerificationSystem {
 		
 		while(rows < 8 && puzzleIsValid) {
 			while (columns < 8 && puzzleIsValid) {
-				if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex == 8) {
+				if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex <= 8) {
 					columns++;
 					findColumnIndex = 0;
 				}
-				if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex < 9) {
+				if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex < 8) {
 					findColumnIndex++;
 				}
 				if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex == 8) {
@@ -98,14 +98,14 @@ public class PuzzleVerificationSystem {
 					columnsAreValid = true;
 				}
 			}
-			if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findRowIndex == 8) {
+			if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findRowIndex <= 8) {
 				rows++;
 				findRowIndex = 0;
 			}
-			if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex < 9) {
+			if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex < 8) {
 				findRowIndex++;
 			}
-			if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] || findRowIndex == 8) {
+			if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex == 8) {
 				setResult(false);
 			}
 			if (rows == 8) {

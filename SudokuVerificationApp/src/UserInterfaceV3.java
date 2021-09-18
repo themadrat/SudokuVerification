@@ -126,7 +126,7 @@ public class UserInterfaceV3 extends JFrame {
 		});
 		btnSubmitDirectory.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnSubmitDirectory.setEnabled(false);
-		btnSubmitDirectory.setBounds(331, 474, 100, 75);
+		btnSubmitDirectory.setBounds(329, 499, 112, 50);
 		contentPane.add(btnSubmitDirectory);
 		
 		btnSubmitPuzzle = new JButton("Submit Puzzles");
@@ -142,7 +142,7 @@ public class UserInterfaceV3 extends JFrame {
 		
 		lblVerificationDisplay1 = new JLabel("");
 		lblVerificationDisplay1.setEnabled(false);
-		lblVerificationDisplay1.setBounds(255, 211, 50, 50);
+		lblVerificationDisplay1.setBounds(255, 61, 200, 200);
 		contentPane.add(lblVerificationDisplay1);
 		
 		lblVerificationDisplay2 = new JLabel("");
@@ -180,5 +180,10 @@ public class UserInterfaceV3 extends JFrame {
 		textAreaSudoku1.setFont(new Font("Monospaced", Font.PLAIN, 20));
 		textAreaSudoku1.setBounds(120, 11, 125, 250);
 		contentPane.add(textAreaSudoku1);
+		
+		JLabel lblNewLabel = new JLabel("Do Not Use Any C Directories Outside Of The Project Folder. All Other Diretories Like D:\\, E:\\, etc will work.");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel.setBounds(59, 474, 655, 25);
+		contentPane.add(lblNewLabel);
 	}
 }
