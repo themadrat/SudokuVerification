@@ -7,8 +7,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.DropMode;
 import javax.swing.JTable;
@@ -31,11 +33,12 @@ public class UserInterfaceV3 extends JFrame {
 	private JLabel lblVerficationDisplay3;
 	private JButton btnSave;
 	private JLabel lblSaveLoaction;
-	private JTextPane textPaneSudoku;
+	private JTextArea textAreaSudoku1;
 	
 	private FileManager FM = new FileManager();
 	private PuzzleVerificationSystem PVZ = new PuzzleVerificationSystem();
 	private JTextField textFieldDirectory;
+	
 	
 	/**
 	 * Launch the application.
@@ -58,7 +61,7 @@ public class UserInterfaceV3 extends JFrame {
 	 */
 	public UserInterfaceV3() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 650, 500);
+		setBounds(100, 100, 800, 599);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -84,6 +87,7 @@ public class UserInterfaceV3 extends JFrame {
 				btnUseAFile.setEnabled(false);
 				textFieldDirectory.setEnabled(true);
 				btnSubmitDirectory.setEnabled(true);
+				textFieldDirectory.setEditable(true);
 			}
 		});
 		btnUseAFile.setBounds(10, 72, 100, 50);
@@ -95,22 +99,30 @@ public class UserInterfaceV3 extends JFrame {
 				int[][] puzzle1;
 				int rowCounter = 0;
 				int columnCounter = 0;
-				
-				FM.loadPuzzleFile(textFieldDirectory.getText());
-				puzzle1 = FM.setPuzzle();
-				while (rowCounter < 9) {
-					while (columnCounter < 9) {
-						textPaneSudoku.setText(String.valueOf(puzzle1[rowCounter][columnCounter]));
-						columnCounter++;
+					
+					try {
+						FM.loadPuzzleFile(textFieldDirectory.getText());
+						textAreaSudoku1.setEnabled(true);
+						puzzle1 = FM.setPuzzle();
+						while (rowCounter < 9) {
+							while (columnCounter < 9) {
+								textAreaSudoku1.append(String.valueOf(puzzle1[rowCounter][columnCounter]));
+								columnCounter++;
+							}
+							textAreaSudoku1.append("\n");
+							rowCounter++;
+							columnCounter = 0;
+						}
 					}
-					rowCounter++;
-					columnCounter = 0;
+				catch(Exception e1){
+					JOptionPane.showMessageDialog(null, "Error: File Cound Not Be Found" + "\n" + "Please Enter a Valid Directory With A Valid File");
 				}
+				PVZ.verifyPuzzle();
 			}
 		});
 		btnSubmitDirectory.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnSubmitDirectory.setEnabled(false);
-		btnSubmitDirectory.setBounds(251, 374, 100, 75);
+		btnSubmitDirectory.setBounds(331, 474, 100, 75);
 		contentPane.add(btnSubmitDirectory);
 		
 		btnSubmitPuzzle = new JButton("Submit Puzzles");
@@ -121,17 +133,17 @@ public class UserInterfaceV3 extends JFrame {
 		});
 		btnSubmitPuzzle.setEnabled(false);
 		btnSubmitPuzzle.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		btnSubmitPuzzle.setBounds(419, 136, 196, 35);
+		btnSubmitPuzzle.setBounds(290, 315, 196, 35);
 		contentPane.add(btnSubmitPuzzle);
 		
 		lblVerficationDisplay1 = new JLabel("");
 		lblVerficationDisplay1.setEnabled(false);
-		lblVerficationDisplay1.setBounds(120, 182, 50, 50);
+		lblVerficationDisplay1.setBounds(255, 182, 50, 50);
 		contentPane.add(lblVerficationDisplay1);
 		
 		lblVerficationDisplay2 = new JLabel("");
 		lblVerficationDisplay2.setEnabled(false);
-		lblVerficationDisplay2.setBounds(219, 182, 50, 50);
+		lblVerficationDisplay2.setBounds(529, 182, 50, 50);
 		contentPane.add(lblVerficationDisplay2);
 		
 		lblVerficationDisplay3 = new JLabel("");
@@ -142,22 +154,27 @@ public class UserInterfaceV3 extends JFrame {
 		btnSave = new JButton("Save Puzzles");
 		btnSave.setEnabled(false);
 		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnSave.setBounds(237, 292, 132, 35);
+		btnSave.setBounds(319, 397, 132, 35);
 		contentPane.add(btnSave);
 		
 		lblSaveLoaction = new JLabel("Saves as SaveSudoku.txt in project Data folder");
 		lblSaveLoaction.setEnabled(false);
 		lblSaveLoaction.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblSaveLoaction.setBounds(147, 256, 346, 25);
+		lblSaveLoaction.setBounds(219, 361, 346, 25);
 		contentPane.add(lblSaveLoaction);
 		
 		textFieldDirectory = new JTextField();
-		textFieldDirectory.setBounds(10, 338, 605, 20);
+		textFieldDirectory.setEditable(false);
+		textFieldDirectory.setEnabled(false);
+		textFieldDirectory.setBounds(82, 443, 605, 20);
 		contentPane.add(textFieldDirectory);
 		textFieldDirectory.setColumns(10);
 		
-		textPaneSudoku = new JTextPane();
-		textPaneSudoku.setBounds(120, 11, 208, 158);
-		contentPane.add(textPaneSudoku);
+		textAreaSudoku1 = new JTextArea();
+		textAreaSudoku1.setEditable(false);
+		textAreaSudoku1.setEnabled(false);
+		textAreaSudoku1.setFont(new Font("Monospaced", Font.PLAIN, 20));
+		textAreaSudoku1.setBounds(120, 11, 125, 250);
+		contentPane.add(textAreaSudoku1);
 	}
 }
