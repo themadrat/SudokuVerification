@@ -1,9 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Scanner;
-
-import javax.swing.JOptionPane;
 
 public class FileManager {
 	
@@ -58,6 +55,7 @@ public class FileManager {
 		catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
+		fileScanner.close();
 	}
 	
 	public int[][] setPuzzle() {

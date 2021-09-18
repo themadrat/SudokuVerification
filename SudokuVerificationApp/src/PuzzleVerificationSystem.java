@@ -1,9 +1,7 @@
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
 
 public class PuzzleVerificationSystem {
 	
-	private boolean puzzleIsValid;																			//Declaration of a private global scope boolean.
+	private boolean puzzleIsValid = true;																			//Declaration of a private global scope boolean.
 																											//This boolean will be used for the accessor method
 																											//that will share the validity of the puzzle.
 
@@ -11,31 +9,51 @@ public class PuzzleVerificationSystem {
 																											//Sudoku puzzle to be validated. This variable is also
 																											//instantiated here.
 
-	private boolean rowsAreValid;
-	private boolean columnsAreValid;
+	private boolean rowsAreValid = false;
+	private boolean columnsAreValid = false;
 	private boolean blocksAreValid;
 	
 	FileManager FM = new FileManager();																		//Creates an instance of FileManager in
 																											//PuzzleVerificationSystem
 	
-	//private int[][] getPuzzleToCheck() {
+	private static int[][] validNumbers = getMaxValues();
+	
+	private static int[][] getMaxValues() {
 		/* 
-		 * Method:					puzzleToCheck()
+		 * Method:					getMaxValues()
 		 * 
 		 * Method Parameters:		None
 		 * 
 		 * Method Return:			int[][]
 		 * 
-		 * Synopsis:				This method will serve as the way in which puzzles are retrieved so
-		 * 							that they maay be verified as valid or invalid.
+		 * Synopsis:				This method will serve as the creator of the array
+		 * 							in which the puzzles will be compared to
 		 * 
 		 * Modifications:			Date:		Name:			Modification:
 		 * 							09/15/2021	Jared Shaddick	Method Created 
 		 * 							09/15/2021	Jared Shaddick	Block Comments Created
 		 * 							09/18/2021	Jared Shaddick	In-Line Comments Created
 		 */
-		//return null;
-	//}
+		int[][] numbersToFind = new int[9][9];
+		numbersToFind[0][0] = 1;
+		numbersToFind[1][0] = 2;
+		numbersToFind[2][0] = 3;
+		numbersToFind[3][0] = 4;
+		numbersToFind[4][0] = 5;
+		numbersToFind[5][0] = 6;
+		numbersToFind[6][0] = 7;
+		numbersToFind[7][0] = 8;
+		numbersToFind[8][0] = 9;
+		numbersToFind[0][1] = 2;
+		numbersToFind[0][2] = 3;
+		numbersToFind[0][3] = 4;
+		numbersToFind[0][4] = 5;
+		numbersToFind[0][5] = 6;
+		numbersToFind[0][6] = 7;
+		numbersToFind[0][7] = 8;
+		numbersToFind[0][8] = 9;
+		return numbersToFind;
+	}
 	
 	public void verifyPuzzle() {
 		/* 
@@ -51,34 +69,53 @@ public class PuzzleVerificationSystem {
 		 * Modifications:			Date:		Name:			Modification:
 		 * 							09/15/2021	Jared Shaddick	Method Created
 		 * 							09/15/2021	Jared Shaddick	Block Comments Created
-		 * 							09/18/2021	Jared Shaddick	Merged getPuzzleToCheck as
-		 * 														it did nothing but apply the
-		 * 														puzzle to validate to the static
-		 * 														array puzzleToValidate.
+		 * 							09/18/2021	Jared Shaddick	2 Of The 3 Parts Of The Validation
+		 * 														Algorithm Have Been Completed
 		 */
 		puzzleToValidate = FM.setPuzzle();																	//Passes the 2D array from FileManager to this
 																											//method so that it may be validated
-		int[] numbersToFind = new int[9];
-		numbersToFind[0] = 1;
-		numbersToFind[1] = 2;
-		numbersToFind[2] = 3;
-		numbersToFind[3] = 4;
-		numbersToFind[4] = 5;
-		numbersToFind[5] = 6;
-		numbersToFind[6] = 7;
-		numbersToFind[7] = 8;
-		numbersToFind[8] = 9;
 		
-		int valueToFind = 1;
+		int findColumnIndex = 0;
+		int findRowIndex = 0;
 		int rows = 0;
 		int columns = 0;
-		//while(rows < 9) {
-		//	while (columns < 9) {
-		//	}
-		//}
+		
+		boolean puzzleIsValid = true;
+		
+		while(rows < 8 && puzzleIsValid) {
+			while (columns < 8 && puzzleIsValid) {
+				if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex == 8) {
+					columns++;
+					findColumnIndex = 0;
+				}
+				if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex < 9) {
+					findColumnIndex++;
+				}
+				if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex == 8) {
+					setResult(false);
+				}
+				if (columns == 8) {
+					columnsAreValid = true;
+				}
+			}
+			if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findRowIndex == 8) {
+				rows++;
+				findRowIndex = 0;
+			}
+			if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex < 9) {
+				findRowIndex++;
+			}
+			if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] || findRowIndex == 8) {
+				setResult(false);
+			}
+			if (rows == 8) {
+				rowsAreValid = true;
+			}
+			
+		}
 	}
 	
-	public void setResult(boolean isPuzzleValid) {
+	public void setResult(boolean validPuzzle) {
 		/*
 		 * Method:					getResult()
 		 * 
@@ -93,11 +130,17 @@ public class PuzzleVerificationSystem {
 		 * 							09/17/2021	Jared Shaddick	Method Created
 		 * 							09/17/2021	Jared Shaddick	Block Comments Created
 		 * 							09/17/2021	Jared Shaddick	In-Line Comments Created
-		 * 							09/17/2021	Jared Shaddick	Setup Complete
+		 * 							09/18/2021	Jared Shaddick	Implemented 2 Of The 3 Results
+		 * 														From The Validation Method
 		 */
-		this.puzzleIsValid = isPuzzleValid;																	//sets the private global boolean, puzzleIsValid, to
-	}																										//to the accessor method, setResult(), using the boolean
-																											//parameter, isPuzzleValid.
+		if (rowsAreValid && columnsAreValid) {
+			puzzleIsValid = true;
+		}
+		if (!validPuzzle) {
+			puzzleIsValid = false;
+		}
+		
+	}
 
 	public boolean isPuzzleValid() {
 		/*

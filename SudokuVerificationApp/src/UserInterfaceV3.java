@@ -1,25 +1,19 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.awt.event.ActionEvent;
-import javax.swing.DropMode;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextArea;
-import java.awt.Color;
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class UserInterfaceV3 extends JFrame {
 
 	private JPanel contentPane;
@@ -28,9 +22,9 @@ public class UserInterfaceV3 extends JFrame {
 	private JButton btnUseAFile;
 	private JButton btnSubmitDirectory;
 	private JButton btnSubmitPuzzle;
-	private JLabel lblVerficationDisplay1;
-	private JLabel lblVerficationDisplay2;
-	private JLabel lblVerficationDisplay3;
+	private JLabel lblVerificationDisplay1;
+	private JLabel lblVerificationDisplay2;
+	private JLabel lblVerificationDisplay3;
 	private JButton btnSave;
 	private JLabel lblSaveLoaction;
 	private JTextArea textAreaSudoku1;
@@ -38,6 +32,9 @@ public class UserInterfaceV3 extends JFrame {
 	private FileManager FM = new FileManager();
 	private PuzzleVerificationSystem PVZ = new PuzzleVerificationSystem();
 	private JTextField textFieldDirectory;
+	
+	private ImageIcon checkMark = new ImageIcon("Assets/CheckMark.png");
+	private ImageIcon XMark = new ImageIcon("Assets/X-Mark.png");
 	
 	
 	/**
@@ -96,6 +93,7 @@ public class UserInterfaceV3 extends JFrame {
 		btnSubmitDirectory = new JButton("Open File");
 		btnSubmitDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lblVerificationDisplay1.setEnabled(true);
 				int[][] puzzle1;
 				int rowCounter = 0;
 				int columnCounter = 0;
@@ -118,6 +116,12 @@ public class UserInterfaceV3 extends JFrame {
 					JOptionPane.showMessageDialog(null, "Error: File Cound Not Be Found" + "\n" + "Please Enter a Valid Directory With A Valid File");
 				}
 				PVZ.verifyPuzzle();
+				if (PVZ.isPuzzleValid() == true) {
+					lblVerificationDisplay1.setIcon(checkMark);
+				}
+				if (PVZ.isPuzzleValid() == false) {
+					lblVerificationDisplay1.setIcon(XMark);
+				}
 			}
 		});
 		btnSubmitDirectory.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -136,20 +140,20 @@ public class UserInterfaceV3 extends JFrame {
 		btnSubmitPuzzle.setBounds(290, 315, 196, 35);
 		contentPane.add(btnSubmitPuzzle);
 		
-		lblVerficationDisplay1 = new JLabel("");
-		lblVerficationDisplay1.setEnabled(false);
-		lblVerficationDisplay1.setBounds(255, 182, 50, 50);
-		contentPane.add(lblVerficationDisplay1);
+		lblVerificationDisplay1 = new JLabel("");
+		lblVerificationDisplay1.setEnabled(false);
+		lblVerificationDisplay1.setBounds(255, 211, 50, 50);
+		contentPane.add(lblVerificationDisplay1);
 		
-		lblVerficationDisplay2 = new JLabel("");
-		lblVerficationDisplay2.setEnabled(false);
-		lblVerficationDisplay2.setBounds(529, 182, 50, 50);
-		contentPane.add(lblVerficationDisplay2);
+		lblVerificationDisplay2 = new JLabel("");
+		lblVerificationDisplay2.setEnabled(false);
+		lblVerificationDisplay2.setBounds(529, 182, 50, 50);
+		contentPane.add(lblVerificationDisplay2);
 		
-		lblVerficationDisplay3 = new JLabel("");
-		lblVerficationDisplay3.setEnabled(false);
-		lblVerficationDisplay3.setBounds(319, 182, 50, 50);
-		contentPane.add(lblVerficationDisplay3);
+		lblVerificationDisplay3 = new JLabel("");
+		lblVerificationDisplay3.setEnabled(false);
+		lblVerificationDisplay3.setBounds(120, 294, 50, 50);
+		contentPane.add(lblVerificationDisplay3);
 		
 		btnSave = new JButton("Save Puzzles");
 		btnSave.setEnabled(false);
