@@ -31,6 +31,7 @@ public class UserInterfaceV3 extends JFrame {
 	private JLabel lblVerficationDisplay3;
 	private JButton btnSave;
 	private JLabel lblSaveLoaction;
+	private JTextPane textPaneSudoku;
 	
 	private FileManager FM = new FileManager();
 	private PuzzleVerificationSystem PVZ = new PuzzleVerificationSystem();
@@ -91,7 +92,20 @@ public class UserInterfaceV3 extends JFrame {
 		btnSubmitDirectory = new JButton("Open File");
 		btnSubmitDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int[][] puzzle1;
+				int rowCounter = 0;
+				int columnCounter = 0;
+				
 				FM.loadPuzzleFile(textFieldDirectory.getText());
+				puzzle1 = FM.setPuzzle();
+				while (rowCounter < 9) {
+					while (columnCounter < 9) {
+						textPaneSudoku.setText(String.valueOf(puzzle1[rowCounter][columnCounter]));
+						columnCounter++;
+					}
+					rowCounter++;
+					columnCounter = 0;
+				}
 			}
 		});
 		btnSubmitDirectory.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -142,8 +156,8 @@ public class UserInterfaceV3 extends JFrame {
 		contentPane.add(textFieldDirectory);
 		textFieldDirectory.setColumns(10);
 		
-		JTextPane textPane = new JTextPane();
-		textPane.setBounds(120, 11, 208, 158);
-		contentPane.add(textPane);
+		textPaneSudoku = new JTextPane();
+		textPaneSudoku.setBounds(120, 11, 208, 158);
+		contentPane.add(textPaneSudoku);
 	}
 }

@@ -5,7 +5,12 @@ public class PuzzleVerificationSystem {
 	private boolean puzzleIsValid;
 	
 	private int[] thePuzzles;
-
+	
+	private int[][] puzzle1;
+	
+	
+	FileManager FM = new FileManager();
+	
 	private int[][] getPuzzleToCheck() {
 		/* 
 		 * Method:					puzzleToCheck()
@@ -22,6 +27,7 @@ public class PuzzleVerificationSystem {
 		 * 							09/15/2021	Jared Shaddick	Block Comments Created
 		 * 
 		 */
+		puzzle1 = FM.setPuzzle();
 		
 		return null;
 	}

@@ -49,19 +49,24 @@ public class FileManager {
 				columnCounter = 0;
 			}
 			
-			while (rowReader < 9) {
+			/*while (rowReader < 9) {
 				while (columnReader < 9) {
 					System.out.print(puzzle1[rowReader][columnReader]);
 					columnReader++;
 				}
 				rowReader++;
 				columnReader = 0;
-			}
+			}*/
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "File Could Not Be Loaded");
 		}
+	}
+	
+	public int[][] setPuzzle() {
+		
+		return puzzle1;
 	}
 	
 	private void savePuzzleToFile() {
