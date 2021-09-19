@@ -2,16 +2,11 @@
 public class PuzzleVerificationSystem {
 	
 	private boolean puzzleIsValid = true;																			//Declaration of a private global scope boolean.
-																											//This boolean will be used for the accessor method
-																											//that will share the validity of the puzzle.
+																													//This boolean will be used for the accessor method
+																													//that will share the validity of the puzzles
 
-	private static int[][] puzzleToValidate = new int[9][9];												//This variable is a 2D array that will store the
-																											//Sudoku puzzle to be validated. This variable is also
-																											//instantiated here.
-
-	private boolean rowsAreValid = false;
-	private boolean columnsAreValid = false;
-	private boolean blocksAreValid;
+	private boolean xYAreValid = false;
+	private boolean blocksAreValid = false;
 	
 	private static int[][] validNumbers = getMaxValues();
 	
@@ -68,9 +63,8 @@ public class PuzzleVerificationSystem {
 		 * 							09/15/2021	Jared Shaddick	Block Comments Created
 		 * 							09/18/2021	Jared Shaddick	2 Of The 3 Parts Of The Validation
 		 * 														Algorithm Have Been Completed
-		 */																//Passes the 2D array from FileManager to this
-																											//method so that it may be validated
-		
+		 */
+
 		int findColumnIndex = 0;
 		int findRowIndex = 0;
 		int rows = 0;
@@ -78,34 +72,32 @@ public class PuzzleVerificationSystem {
 		
 		boolean puzzleIsValid = true;
 		
-		while(rows < 8 && puzzleIsValid) {
-			while (columns < 8 && puzzleIsValid) {
-				if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex < 8) {
-					columns++;
-					findColumnIndex = 0;
-				}
-				if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex < 8) {
-					findColumnIndex++;
-				}
-				if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex == 8) {
-					setResult(false);
-				}
-				if (columns == 8) {
-					columnsAreValid = true;
-				}
+		while(rows <= 8 && puzzleIsValid) {
+			if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex < 8) {
+				columns++;
+				findColumnIndex = 0;
 			}
-			if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findRowIndex < 8) {
-				rows++;
-				findRowIndex = 0;
+			if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex < 8) {
+				findColumnIndex++;
 			}
-			if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex < 8) {
-				findRowIndex++;
-			}
-			if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex == 8) {
+			if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex == 8) {
 				setResult(false);
 			}
-			if (rows == 8) {
-				rowsAreValid = true;
+			if (columns == 8) {
+				columns = 0;
+				if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findRowIndex < 8) {
+					rows++;
+					findRowIndex = 0;
+				}
+				if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex < 8) {
+					findRowIndex++;
+				}
+				if (puzzleToValidate[rows][columns] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex == 8) {
+					setResult(false);
+				}
+			}
+			if (rows == 8 && columns == 8) {
+				xYAreValid = true;
 			}
 			
 		}
@@ -116,37 +108,37 @@ public class PuzzleVerificationSystem {
 		int validBlocks = 0;
 		findRowIndex = 0;
 		findColumnIndex = 0;
-		while (rowGrid < 3*rowMultiplier - 1 && rowGrid < 8) {
-			while (columnGrid < 3*columnMultiplier - 1 && columnGrid < 8) {
-				if (puzzleToValidate[rowGrid][columnGrid] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex < 8)	{
-					columnGrid++;
-					findColumnIndex = 0;
-				}
-				if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex < 8)	{
-					findColumnIndex++;
-				}
-				if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex == 8)	{
-					setResult(false);
-				}
+		while (rowGrid < 3*rowMultiplier - 1 && rowGrid < 8 && columnGrid < 3*columnMultiplier - 1 && columnGrid < 8) {
+			if (puzzleToValidate[rowGrid][columnGrid] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex < 8)	{
+				columnGrid++;
+				findColumnIndex = 0;
 			}
-			columnMultiplier += 3;
-			if (puzzleToValidate[rowGrid][columnGrid] == validNumbers[findRowIndex][findColumnIndex] || findRowIndex < 8)	{
-				rowGrid++;
-				findRowIndex = 0;
+			if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex < 8)	{
+				findColumnIndex++;
 			}
-			if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex < 8)	{
-				findRowIndex++;
-			}
-			if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex == 8)	{
+			if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex == 8)	{
 				setResult(false);
 			}
-			validBlocks++;
-			rowMultiplier += 1;
+			if(columnGrid == 8) {
+				columnMultiplier += 3;
+				if (puzzleToValidate[rowGrid][columnGrid] == validNumbers[findRowIndex][findColumnIndex] || findRowIndex < 8)	{
+					rowGrid++;
+					findRowIndex = 0;
+				}
+				if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex < 8)	{
+					findRowIndex++;
+				}
+				if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex == 8)	{
+					setResult(false);
+				}
+				columnGrid = 0;
+				validBlocks++;
+				rowMultiplier += 1;
+			}
+			
 			if (validBlocks == 9) {
 				blocksAreValid = true;
 			}
-			
-			
 		}
 	}
 	
@@ -168,7 +160,7 @@ public class PuzzleVerificationSystem {
 		 * 							09/18/2021	Jared Shaddick	Implemented 2 Of The 3 Results
 		 * 														From The Validation Method
 		 */
-		if (rowsAreValid && columnsAreValid && blocksAreValid) {
+		if (xYAreValid && blocksAreValid) {
 			puzzleIsValid = true;
 		}
 		if (!validPuzzle) {

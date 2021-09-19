@@ -9,22 +9,17 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.DropMode;
 
 @SuppressWarnings("serial")
 public class UserInterfaceV3 extends JFrame {
 
 	private JPanel contentPane;
+	
 	
 	private JButton btnCreateUserPuzzle;
 	private JButton btnUseAFile;
@@ -35,15 +30,14 @@ public class UserInterfaceV3 extends JFrame {
 	private JTextArea textAreaSudoku1;
 	
 	private FileManager FM = new FileManager();
-	private PuzzleVerificationSystem PVZ = new PuzzleVerificationSystem();
+	private PuzzleVerificationSystem PVS = new PuzzleVerificationSystem();
 	private JTextField textFieldDirectory;
 	
 	private ImageIcon checkMark = new ImageIcon("Assets/CheckMark.png");
 	private ImageIcon XMark = new ImageIcon("Assets/X-Mark.png");
 	
 	private Scanner textScanner;
-	
-	private FileWriter saveToFile;
+
 	private JTextField textFieldSaveDirectory;
 	
 	private static int[][] puzzleFromText;
@@ -127,13 +121,7 @@ public class UserInterfaceV3 extends JFrame {
 				catch(Exception e1){
 					JOptionPane.showMessageDialog(null, "Error: File Cound Not Be Found" + "\n" + "Please Enter a Valid Directory With A Valid File");
 				}
-				PVZ.isPuzzleValid();
-				if (PVZ.isPuzzleValid() == true) {
-					lblVerificationDisplay1.setIcon(checkMark);
-				}
-				if (PVZ.isPuzzleValid() == false) {
-					lblVerificationDisplay1.setIcon(XMark);
-				}
+				PVS.isPuzzleValid();
 			}
 		});
 		btnSubmitDirectory.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -144,23 +132,7 @@ public class UserInterfaceV3 extends JFrame {
 		btnSubmitPuzzle = new JButton("Submit Puzzles");
 		btnSubmitPuzzle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int rowCounter = 0;
-				int columnCounter = 0;
-				if(sufficientPuzzle()) {
-					textScanner = new Scanner(textAreaSudoku1.getText());
-					puzzleFromText = new int[9][9];
-					puzzleFromText[rowCounter][columnCounter] = textScanner.nextInt();
-					columnCounter++;
-					while (textScanner.hasNextLine() && rowCounter < 9) {
-						while (textScanner.hasNextInt() && columnCounter < 9) {
-							puzzleFromText[rowCounter][columnCounter] = textScanner.nextInt();
-							columnCounter++;
-						}
-						rowCounter++;
-						columnCounter = 0;
-					}
-					PVZ.verifyPuzzle(puzzleFromText);
-				}
+				sufficientPuzzle();
 				
 			}
 		});
@@ -219,26 +191,33 @@ public class UserInterfaceV3 extends JFrame {
 		textFieldSaveDirectory.setColumns(10);
 		textFieldSaveDirectory.setBounds(82, 361, 605, 20);
 		contentPane.add(textFieldSaveDirectory);
+		
+		JButton btnNewButton = new JButton("Get Result");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getTheResult();
+			}
+		});
+		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnNewButton.setBounds(352, 11, 132, 50);
+		contentPane.add(btnNewButton);
 	}
 	private boolean sufficientPuzzle() {
 		textScanner = new Scanner(textAreaSudoku1.getText());
 		int detectedRows = 0;
 		int detectedColumns = 0;
 		
-		boolean enoughColumns = false;
-		boolean enoughRows = false;
+		boolean enoughColumns = true;
+		boolean enoughRows = true;
 		
-		while (detectedRows < 8) {
-			while (detectedColumns < 8) {
-				if (textScanner.hasNextInt()) {
-					textScanner.nextInt();
+		while (detectedRows < 8 && enoughRows) {
+			while (detectedColumns < 8 && enoughColumns) {
+				if (textScanner.hasNext()) {
+					textScanner.next();
 					detectedColumns++;
 				}
 				else if (detectedColumns < 8) {
 					enoughColumns = false;
-				}
-				else if (detectedColumns == 8) {
-					enoughColumns = true;
 				}
 			}
 			if (textScanner.hasNextLine()) {
@@ -249,16 +228,48 @@ public class UserInterfaceV3 extends JFrame {
 			else if (detectedColumns < 8) {
 				enoughRows = false;
 			}
-			else if (detectedRows == 8) {
-				enoughRows = true;
-			}
 		}
 		textScanner.close();
 		if (!enoughRows || !enoughColumns) {
+			PVS.setResult(false);
+			if (PVS.isPuzzleValid() == false) {
+				lblVerificationDisplay1.setIcon(XMark);
+			}
 			return false;
 		}
 		else {
+			assignPuzzleFromText();
 			return true;
+		}
+	}
+	
+	private void assignPuzzleFromText() {
+		int rowCounter = 0;
+		int columnCounter = 0;
+		if(sufficientPuzzle()) {
+			textScanner = new Scanner(textAreaSudoku1.getText());
+			puzzleFromText = new int[9][9];
+			puzzleFromText[rowCounter][columnCounter] = textScanner.nextInt();
+			columnCounter++;
+			while (textScanner.hasNextLine() && rowCounter < 9) {
+				while (textScanner.hasNextInt() && columnCounter < 9) {
+					puzzleFromText[rowCounter][columnCounter] = textScanner.nextInt();
+					columnCounter++;
+				}
+				textScanner.nextLine();
+				rowCounter++;
+				columnCounter = 0;
+			}
+			PVS.verifyPuzzle(puzzleFromText);
+		}
+	}
+	
+	private void getTheResult() {
+		if (PVS.isPuzzleValid() == false) {
+			lblVerificationDisplay1.setIcon(XMark);
+		}
+		if (PVS.isPuzzleValid() == true) {
+			lblVerificationDisplay1.setIcon(checkMark);
 		}
 	}
 }
