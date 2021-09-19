@@ -8,6 +8,8 @@ public class FileManager {
 	
 	private Scanner fileScanner;
 	
+	PuzzleVerificationSystem PVZ = new PuzzleVerificationSystem();
+	
 
 	
 	public void loadPuzzleFile(String fileLocation) {
@@ -31,26 +33,53 @@ public class FileManager {
 		 */
 		int rowCounter = 0;
 		int columnCounter = 0;
-		//int columnReader = 0;
-		//int rowReader = 0;
 		
 		try {
 			File txtFile = new File(fileLocation);
 			fileScanner = new Scanner(txtFile);
 			
-			puzzleToLoad = new int[9][9];
-			puzzleToLoad[rowCounter][columnCounter] = fileScanner.nextInt();
-			columnCounter++;
-			while (fileScanner.hasNextLine() && rowCounter < 9) {
-				while (fileScanner.hasNextInt() && columnCounter < 9) {
-					puzzleToLoad[rowCounter][columnCounter] = fileScanner.nextInt();
-					columnCounter++;
+			int detectedRows = 0;
+			int detectedColumns = 0;
+			
+			boolean enoughColumns = true;
+			boolean enoughRows = true;
+			
+			while (detectedRows < 8 && enoughRows) {
+				while (detectedColumns < 8 && enoughColumns) {
+					if (fileScanner.hasNext()) {
+						fileScanner.next();
+						detectedColumns++;
+					}
+					else if (detectedColumns < 8) {
+						enoughColumns = false;
+					}
 				}
-				rowCounter++;
-				columnCounter = 0;
+				if (fileScanner.hasNextLine()) {
+					fileScanner.nextLine();
+					detectedColumns = 0;
+					detectedRows++;
+				}
+				else if (detectedRows < 8) {
+					enoughRows = false;
+				}
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			fileScanner.close();
+			if (enoughColumns && enoughRows) {
+				fileScanner = new Scanner(txtFile);
+				puzzleToLoad = new int[9][9];
+				puzzleToLoad[rowCounter][columnCounter] = fileScanner.nextInt();
+				columnCounter++;
+				while (fileScanner.hasNextLine() && rowCounter < 9) {
+					while (fileScanner.hasNextInt() && columnCounter < 9) {
+						puzzleToLoad[rowCounter][columnCounter] = fileScanner.nextInt();
+						columnCounter++;
+					}
+					rowCounter++;
+					columnCounter = 0;
+				}
+			} 
+		}catch (FileNotFoundException e) {
+				e.printStackTrace();
 		}
 		catch (NumberFormatException e) {
 			e.printStackTrace();
@@ -67,9 +96,9 @@ public class FileManager {
 		 * Method Return:		int[][]
 		 * 
 		 * Synopsis:			This method serves to make the data from the
-		 * 						loaded file available to other classes
+		 * 						loaded file available to UserInterfaace
 		 * 
-		 * Moodifications:		Date:		Names:			Modification:
+		 * Modifications:		Date:		Names:			Modification:
 		 * 						09/17/2021	Jared Shaddick	Method Created
 		 * 						09/17/2021	Jared Shaddick	Method Finished
 		 * 						09/18/2021	Jared Shaddick	Block Comments Created
@@ -77,12 +106,15 @@ public class FileManager {
 		return puzzleToLoad;
 	}
 	
+	public void puzzleToBeVerified() {
+		PVZ.verifyPuzzle(puzzleToLoad);
+	}
 	
-	private void savePuzzleToFile() {
+	public void savePuzzleToFile(String saveFileLocation, int[][] puzzleToSave) {
 		/*
 		 * Method:				savePuzzleToFile()
 		 * 
-		 * Method Parameters:	None
+		 * Method Parameters:	String saveFileLocation, int[][] puzzleToSave
 		 * 
 		 * Method Return:		Void
 		 * 

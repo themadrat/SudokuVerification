@@ -13,9 +13,6 @@ public class PuzzleVerificationSystem {
 	private boolean columnsAreValid = false;
 	private boolean blocksAreValid;
 	
-	FileManager FM = new FileManager();																		//Creates an instance of FileManager in
-																											//PuzzleVerificationSystem
-	
 	private static int[][] validNumbers = getMaxValues();
 	
 	private static int[][] getMaxValues() {
@@ -55,7 +52,7 @@ public class PuzzleVerificationSystem {
 		return numbersToFind;
 	}
 	
-	public void verifyPuzzle() {
+	public void verifyPuzzle(int[][] puzzleToValidate) {
 		/* 
 		 * Method:					verifyRows()
 		 * 
@@ -71,8 +68,7 @@ public class PuzzleVerificationSystem {
 		 * 							09/15/2021	Jared Shaddick	Block Comments Created
 		 * 							09/18/2021	Jared Shaddick	2 Of The 3 Parts Of The Validation
 		 * 														Algorithm Have Been Completed
-		 */
-		puzzleToValidate = FM.setPuzzle();																	//Passes the 2D array from FileManager to this
+		 */																//Passes the 2D array from FileManager to this
 																											//method so that it may be validated
 		
 		int findColumnIndex = 0;
@@ -84,7 +80,7 @@ public class PuzzleVerificationSystem {
 		
 		while(rows < 8 && puzzleIsValid) {
 			while (columns < 8 && puzzleIsValid) {
-				if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex <= 8) {
+				if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex < 8) {
 					columns++;
 					findColumnIndex = 0;
 				}
@@ -98,7 +94,7 @@ public class PuzzleVerificationSystem {
 					columnsAreValid = true;
 				}
 			}
-			if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findRowIndex <= 8) {
+			if (puzzleToValidate[rows][columns] == validNumbers[findRowIndex][findColumnIndex] || findRowIndex < 8) {
 				rows++;
 				findRowIndex = 0;
 			}
@@ -111,6 +107,45 @@ public class PuzzleVerificationSystem {
 			if (rows == 8) {
 				rowsAreValid = true;
 			}
+			
+		}
+		int rowGrid = 0;
+		int columnGrid = 0;
+		int columnMultiplier = 0;
+		int rowMultiplier = 0;
+		int validBlocks = 0;
+		findRowIndex = 0;
+		findColumnIndex = 0;
+		while (rowGrid < 3*rowMultiplier - 1 && rowGrid < 8) {
+			while (columnGrid < 3*columnMultiplier - 1 && columnGrid < 8) {
+				if (puzzleToValidate[rowGrid][columnGrid] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex < 8)	{
+					columnGrid++;
+					findColumnIndex = 0;
+				}
+				if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex < 8)	{
+					findColumnIndex++;
+				}
+				if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex == 8)	{
+					setResult(false);
+				}
+			}
+			columnMultiplier += 3;
+			if (puzzleToValidate[rowGrid][columnGrid] == validNumbers[findRowIndex][findColumnIndex] || findRowIndex < 8)	{
+				rowGrid++;
+				findRowIndex = 0;
+			}
+			if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex < 8)	{
+				findRowIndex++;
+			}
+			if (puzzleToValidate[rowGrid][columnGrid] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex == 8)	{
+				setResult(false);
+			}
+			validBlocks++;
+			rowMultiplier += 1;
+			if (validBlocks == 9) {
+				blocksAreValid = true;
+			}
+			
 			
 		}
 	}
@@ -133,7 +168,7 @@ public class PuzzleVerificationSystem {
 		 * 							09/18/2021	Jared Shaddick	Implemented 2 Of The 3 Results
 		 * 														From The Validation Method
 		 */
-		if (rowsAreValid && columnsAreValid) {
+		if (rowsAreValid && columnsAreValid && blocksAreValid) {
 			puzzleIsValid = true;
 		}
 		if (!validPuzzle) {
