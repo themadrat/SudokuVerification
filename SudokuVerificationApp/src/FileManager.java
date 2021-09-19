@@ -1,5 +1,9 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class FileManager {
@@ -74,8 +78,8 @@ public class FileManager {
 						puzzleToLoad[rowCounter][columnCounter] = fileScanner.nextInt();
 						columnCounter++;
 					}
-					rowCounter++;
 					columnCounter = 0;
+					rowCounter++;
 				}
 			} 
 		}catch (FileNotFoundException e) {
@@ -110,7 +114,7 @@ public class FileManager {
 		PVZ.verifyPuzzle(puzzleToLoad);
 	}
 	
-	public void savePuzzleToFile(String saveFileLocation, int[][] puzzleToSave) {
+	public void savePuzzleToFile(int[][] puzzleToSave) throws IOException {
 		/*
 		 * Method:				savePuzzleToFile()
 		 * 
@@ -125,6 +129,22 @@ public class FileManager {
 		 * 						09/17/2021	Jared Shaddick	Method Created
 		 * 						09/17/2021	Jared Shaddick	Block Comments Created
 		 */
+		File saveFile = new File ("Data/SavedSudoku.txt");
+		FileWriter FW = new FileWriter(saveFile);
+		int row = 0;
+		int column = 0;
+		while (row < 8) {
+			while (column < 8) {
+				FW.write(String.valueOf(puzzleToSave[row][column]));
+				column++;
+			}
+			if (column == 8) {
+				FW.write("\n");
+			}
+			FW.write(String.valueOf(puzzleToSave[row][column]));
+			column = 0;
+			row++;
+		}
 		
 	}
 	

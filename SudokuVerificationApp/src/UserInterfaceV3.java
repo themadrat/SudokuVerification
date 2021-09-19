@@ -45,7 +45,6 @@ public class UserInterfaceV3 extends JFrame {
 	
 	private FileWriter saveToFile;
 	private JTextField textFieldSaveDirectory;
-	private JTextField txtFieldFileName;
 	
 	private static int[][] puzzleFromText;
 	/**
@@ -83,8 +82,6 @@ public class UserInterfaceV3 extends JFrame {
 				btnSubmitPuzzle.setEnabled(true);
 				textAreaSudoku1.setEnabled(true);
 				textAreaSudoku1.setEditable(true);
-				txtFieldFileName.setEnabled(true);
-				txtFieldFileName.setEditable(true);
 				
 			}
 		});
@@ -181,26 +178,11 @@ public class UserInterfaceV3 extends JFrame {
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				int rows = 0;
-				int columns = 0;
-				int numberToAssign;
-				Path createFile = Paths.get(txtFieldFileName.getText());
-				
-				if (sufficientPuzzle()) {
-					int[][]thePuzzleToSave = new int[9][9];
-					
-					textScanner = new Scanner(textAreaSudoku1.getText());
-					
-					while (textScanner.hasNextLine() && rows < 8) {
-						while (textScanner.hasNext() && columns < 8) {
-							numberToAssign = Integer.parseInt(textScanner.next());
-							numberToAssign = thePuzzleToSave[rows][columns];
-							columns++;
-						}
-						numberToAssign = Integer.parseInt(textScanner.next());
-						numberToAssign = thePuzzleToSave[rows][columns];
-					}
-					FM.savePuzzleToFile(textFieldSaveDirectory.getText(), thePuzzleToSave);
+				try {
+					FM.savePuzzleToFile(puzzleFromText);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -237,13 +219,6 @@ public class UserInterfaceV3 extends JFrame {
 		textFieldSaveDirectory.setColumns(10);
 		textFieldSaveDirectory.setBounds(82, 361, 605, 20);
 		contentPane.add(textFieldSaveDirectory);
-		
-		txtFieldFileName = new JTextField();
-		txtFieldFileName.setEditable(false);
-		txtFieldFileName.setEnabled(false);
-		txtFieldFileName.setBounds(82, 328, 198, 22);
-		contentPane.add(txtFieldFileName);
-		txtFieldFileName.setColumns(10);
 	}
 	private boolean sufficientPuzzle() {
 		textScanner = new Scanner(textAreaSudoku1.getText());
