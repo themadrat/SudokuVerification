@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class PuzzleVerificationSystem {
 	
 	private boolean puzzleIsValid = true;																			//Declaration of a private global scope boolean.
