@@ -28,6 +28,7 @@ public class UserInterfaceV3 extends JFrame {
 	private JButton btnSubmitDirectory;
 	private JButton btnSubmitPuzzle;
 	private JLabel lblVerificationDisplay;
+	private JButton btnGetResult;
 	private JButton btnSave;
 	private JTextArea textAreaSudoku;
 	private JTextField textFieldDirectory;
@@ -121,6 +122,7 @@ public class UserInterfaceV3 extends JFrame {
 					rowCounter++;
 					columnCounter = 0;
 				}
+				btnGetResult.setEnabled(true);
 				PVS.verifyPuzzle(puzzle1);
 			}
 		});
@@ -134,6 +136,8 @@ public class UserInterfaceV3 extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				lblVerificationDisplay.setEnabled(true);
 				textAreaSudoku.setEditable(false);
+				btnSave.setEnabled(true);
+				btnGetResult.setEnabled(true);
 				sufficientPuzzle();
 			}
 		});
@@ -147,7 +151,7 @@ public class UserInterfaceV3 extends JFrame {
 		lblVerificationDisplay.setBounds(341, 61, 200, 200);
 		contentPane.add(lblVerificationDisplay);
 		
-		btnSave = new JButton("Save Puzzles");
+		btnSave = new JButton("Save Puzzle");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -186,15 +190,20 @@ public class UserInterfaceV3 extends JFrame {
 		lblNewLabel.setBounds(59, 430, 655, 25);
 		contentPane.add(lblNewLabel);
 		
-		JButton btnNewButton = new JButton("Get Result");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnGetResult = new JButton("Get Result");
+		btnGetResult.setEnabled(false);
+		btnGetResult.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getTheResult();
 			}
 		});
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnNewButton.setBounds(341, 9, 132, 50);
-		contentPane.add(btnNewButton);
+		btnGetResult.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnGetResult.setBounds(341, 9, 132, 50);
+		contentPane.add(btnGetResult);
+		
+		JButton button = new JButton("New button");
+		button.setBounds(33, 327, 89, 23);
+		contentPane.add(button);
 	}
 	private boolean sufficientPuzzle() throws NumberFormatException {
 		/*

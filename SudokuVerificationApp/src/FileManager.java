@@ -129,15 +129,14 @@ public class FileManager {
 		FileWriter FW = new FileWriter(saveFile);
 		int row = 0;
 		int column = 0;
-		while (row < 8) {
-			while (column < 8) {
-				FW.write(String.valueOf(puzzleToSave[row][column]));
+		while (row <= 8) {
+			while (column <= 8) {
+				FW.write(String.valueOf(puzzleToSave[row][column] + " "));
 				column++;
 			}
-			if (column == 8) {
+			if (column >= 8) {
 				FW.write("\n");
 			}
-			FW.write(String.valueOf(puzzleToSave[row][column]));
 			column = 0;
 			row++;
 		}
