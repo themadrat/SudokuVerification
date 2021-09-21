@@ -25,9 +25,9 @@ public class UserInterfaceV3 extends JFrame {
 	private JButton btnUseAFile;
 	private JButton btnSubmitDirectory;
 	private JButton btnSubmitPuzzle;
-	private JLabel lblVerificationDisplay1;
+	private JLabel lblVerificationDisplay;
 	private JButton btnSave;
-	private JTextArea textAreaSudoku1;
+	private JTextArea textAreaSudoku;
 	
 	private FileManager FM = new FileManager();
 	private PuzzleVerificationSystem PVS = new PuzzleVerificationSystem();
@@ -39,6 +39,8 @@ public class UserInterfaceV3 extends JFrame {
 	private Scanner textScanner;
 
 	private JTextField textFieldSaveDirectory;
+	
+	private boolean puzzleIsSufficient;
 	
 	private static int[][] puzzleFromText;
 	/**
@@ -74,8 +76,8 @@ public class UserInterfaceV3 extends JFrame {
 				btnCreateUserPuzzle.setEnabled(false);
 				btnUseAFile.setEnabled(false);
 				btnSubmitPuzzle.setEnabled(true);
-				textAreaSudoku1.setEnabled(true);
-				textAreaSudoku1.setEditable(true);
+				textAreaSudoku.setEnabled(true);
+				textAreaSudoku.setEditable(true);
 				
 			}
 		});
@@ -99,27 +101,20 @@ public class UserInterfaceV3 extends JFrame {
 		btnSubmitDirectory = new JButton("Open File");
 		btnSubmitDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblVerificationDisplay1.setEnabled(true);
+				lblVerificationDisplay.setEnabled(true);
 				int[][] puzzle1;
 				int rowCounter = 0;
 				int columnCounter = 0;
-					
-					try {
-						FM.loadPuzzleFile(textFieldDirectory.getText());
-						textAreaSudoku1.setEnabled(true);
-						puzzle1 = FM.setPuzzle();
-						while (rowCounter < 9) {
-							while (columnCounter < 9) {
-								textAreaSudoku1.append(String.valueOf(puzzle1[rowCounter][columnCounter]));
-								columnCounter++;
-							}
-							textAreaSudoku1.append("\n");
-							rowCounter++;
-							columnCounter = 0;
-						}
+				FM.loadPuzzleFile(textFieldDirectory.getText());
+				textAreaSudoku.setEnabled(true);
+				puzzle1 = FM.setPuzzle();
+				while (rowCounter < 9) {
+					while (columnCounter < 9) {
+						textAreaSudoku.append(String.valueOf(puzzle1[rowCounter][columnCounter]) + " ");
+						columnCounter++;
 					}
-				catch(Exception e1){
-					JOptionPane.showMessageDialog(null, "Error: File Cound Not Be Found" + "\n" + "Please Enter a Valid Directory With A Valid File");
+					rowCounter++;
+					columnCounter = 0;
 				}
 				PVS.isPuzzleValid();
 			}
@@ -133,7 +128,6 @@ public class UserInterfaceV3 extends JFrame {
 		btnSubmitPuzzle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sufficientPuzzle();
-				
 			}
 		});
 		btnSubmitPuzzle.setEnabled(false);
@@ -141,10 +135,10 @@ public class UserInterfaceV3 extends JFrame {
 		btnSubmitPuzzle.setBounds(290, 315, 196, 35);
 		contentPane.add(btnSubmitPuzzle);
 		
-		lblVerificationDisplay1 = new JLabel("");
-		lblVerificationDisplay1.setEnabled(false);
-		lblVerificationDisplay1.setBounds(339, 72, 200, 200);
-		contentPane.add(lblVerificationDisplay1);
+		lblVerificationDisplay = new JLabel("");
+		lblVerificationDisplay.setEnabled(false);
+		lblVerificationDisplay.setBounds(341, 61, 200, 200);
+		contentPane.add(lblVerificationDisplay);
 		
 		btnSave = new JButton("Save Puzzles");
 		btnSave.addActionListener(new ActionListener() {
@@ -170,15 +164,15 @@ public class UserInterfaceV3 extends JFrame {
 		contentPane.add(textFieldDirectory);
 		textFieldDirectory.setColumns(10);
 		
-		textAreaSudoku1 = new JTextArea();
-		textAreaSudoku1.setToolTipText("");
-		textAreaSudoku1.setWrapStyleWord(true);
-		textAreaSudoku1.setLineWrap(true);
-		textAreaSudoku1.setEditable(false);
-		textAreaSudoku1.setEnabled(false);
-		textAreaSudoku1.setFont(new Font("Monospaced", Font.PLAIN, 20));
-		textAreaSudoku1.setBounds(120, 11, 209, 261);
-		contentPane.add(textAreaSudoku1);
+		textAreaSudoku = new JTextArea();
+		textAreaSudoku.setToolTipText("");
+		textAreaSudoku.setWrapStyleWord(true);
+		textAreaSudoku.setLineWrap(true);
+		textAreaSudoku.setEditable(false);
+		textAreaSudoku.setEnabled(false);
+		textAreaSudoku.setFont(new Font("Monospaced", Font.PLAIN, 20));
+		textAreaSudoku.setBounds(120, 11, 211, 250);
+		contentPane.add(textAreaSudoku);
 		
 		JLabel lblNewLabel = new JLabel("Do Not Use Any C Directories Outside Of The Project Folder. All Other Diretories Like D:\\, E:\\, etc will work.");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -199,55 +193,87 @@ public class UserInterfaceV3 extends JFrame {
 			}
 		});
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnNewButton.setBounds(352, 11, 132, 50);
+		btnNewButton.setBounds(341, 9, 132, 50);
 		contentPane.add(btnNewButton);
 	}
-	private boolean sufficientPuzzle() {
-		textScanner = new Scanner(textAreaSudoku1.getText());
+	private boolean sufficientPuzzle() throws NumberFormatException {
+		/*
+		 * Method:				sufficientPuzzle()
+		 * 
+		 * Method Parameters:	None
+		 * 
+		 * Method Return:		boolean
+		 * 
+		 * Synopsis:			This method serves to determine if the text entered
+		 * 						in textAreaSudoku1 is large enough to be passed to
+		 * 						the PuzzleVerificationSystem
+		 * 
+		 * Modifications:		Date:		Name:			Modification:
+		 * 						09/19/2021	Jared Shaddick	Method Created
+		 * 						09/19/2021	Jared Shaddick	Method Finished
+		 * 						09/20/2021	Jared Shaddick	Began Debugging
+		 * 						09/21/2021	Jared Shaddick	Debugging Completed
+		 */
+		
+		
+		textScanner = new Scanner(textAreaSudoku.getText());
 		int detectedRows = 0;
 		int detectedColumns = 0;
+	
 		
 		boolean enoughColumns = true;
 		boolean enoughRows = true;
 		
-		while (detectedRows < 8 && enoughRows) {
-			while (detectedColumns < 8 && enoughColumns) {
+		while (detectedRows < 9 && enoughRows) {
+			while (detectedColumns < 9 && enoughColumns) {
 				if (textScanner.hasNext()) {
 					textScanner.next();
 					detectedColumns++;
 				}
-				else if (detectedColumns < 8) {
-					enoughColumns = false;
-				}
 			}
 			if (textScanner.hasNextLine()) {
 				textScanner.nextLine();
-				detectedColumns = 0;
 				detectedRows++;
+				detectedColumns = 0;
 			}
-			else if (detectedColumns < 8) {
-				enoughRows = false;
-			}
+			detectedRows++;
 		}
-		textScanner.close();
-		if (!enoughRows || !enoughColumns) {
+		if (!enoughColumns || !enoughColumns) {
 			PVS.setResult(false);
 			if (PVS.isPuzzleValid() == false) {
-				lblVerificationDisplay1.setIcon(XMark);
+				lblVerificationDisplay.setIcon(XMark);
 			}
 			return false;
 		}
 		else {
+			puzzleIsSufficient = true;
 			assignPuzzleFromText();
 			return true;
 		}
+		
 	}
 	
 	private void assignPuzzleFromText() {
+		/*
+		 * Method:				assignPuzzleFromText()
+		 * 
+		 * Method Parameters:	None
+		 * 
+		 * Method Return:		void
+		 * 
+		 * Synopsis:			This method assigns the content from textAreaSudoku1
+		 * 						to a 2D array to be used in the PuzzleVerificationSystem
+		 * 
+		 * Modifications:		Date:		Name:			Modifications:
+		 * 						09/19/2021	Jared Shaddick	Method Created
+		 * 						09/19/2021	Jared Shaddick	Method Setup Finished
+		 * 						09/20/2021	Jared Shaddick	Debugging Started
+		 * 						09/21/2021	Jared Shaddick	Debugging Complete
+		 */
 		int rowCounter = 0;
 		int columnCounter = 0;
-		if(sufficientPuzzle()) {
-			textScanner = new Scanner(textAreaSudoku1.getText());
+		if(puzzleIsSufficient) {
+			textScanner = new Scanner(textAreaSudoku.getText());
 			puzzleFromText = new int[9][9];
 			puzzleFromText[rowCounter][columnCounter] = textScanner.nextInt();
 			columnCounter++;
@@ -256,20 +282,33 @@ public class UserInterfaceV3 extends JFrame {
 					puzzleFromText[rowCounter][columnCounter] = textScanner.nextInt();
 					columnCounter++;
 				}
+				if(textScanner.hasNextLine())
 				textScanner.nextLine();
 				rowCounter++;
 				columnCounter = 0;
 			}
-			PVS.verifyPuzzle(puzzleFromText);
+			PVS.verifyRowsAndColumns(puzzleFromText);
 		}
 	}
 	
 	private void getTheResult() {
+		/*
+		 * Method:				getTheResult()
+		 * 
+		 * Method Parameters:	None
+		 * 
+		 * Method Return:		void
+		 * 
+		 * Synopsis:			This method is designed to take the values
+		 * 						from the isPuzzleValid method and use that
+		 * 						information to display the results to the
+		 * 						user using lblVerificationDisplay1
+		 */
 		if (PVS.isPuzzleValid() == false) {
-			lblVerificationDisplay1.setIcon(XMark);
+			lblVerificationDisplay.setIcon(XMark);
 		}
 		if (PVS.isPuzzleValid() == true) {
-			lblVerificationDisplay1.setIcon(checkMark);
+			lblVerificationDisplay.setIcon(checkMark);
 		}
 	}
 }

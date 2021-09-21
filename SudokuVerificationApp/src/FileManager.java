@@ -71,13 +71,13 @@ public class FileManager {
 				puzzleToLoad = new int[9][9];
 				puzzleToLoad[rowCounter][columnCounter] = fileScanner.nextInt();
 				columnCounter++;
-				while (fileScanner.hasNextLine() && rowCounter < 8) {
-					while (fileScanner.hasNextInt() && columnCounter < 8) {
+				while (fileScanner.hasNextLine() && rowCounter < 9) {
+					while (fileScanner.hasNextInt() && columnCounter < 9) {
 						puzzleToLoad[rowCounter][columnCounter] = fileScanner.nextInt();
 						columnCounter++;
 					}
-					columnCounter = 0;
 					rowCounter++;
+					columnCounter = 0;
 				}
 			} 
 		}catch (FileNotFoundException e) {
@@ -88,7 +88,7 @@ public class FileManager {
 		}
 		fileScanner.close();
 		
-		PVS.verifyPuzzle(puzzleToLoad);
+		PVS.verifyRowsAndColumns(puzzleToLoad);
 	}
 	
 	public int[][] setPuzzle() {
@@ -111,7 +111,7 @@ public class FileManager {
 	}
 	
 	public void puzzleToBeVerified() {
-		PVS.verifyPuzzle(puzzleToLoad);
+		PVS.verifyRowsAndColumns(puzzleToLoad);
 	}
 	
 	public void savePuzzleToFile(int[][] puzzleToSave) throws IOException {
