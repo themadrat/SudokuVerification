@@ -88,7 +88,7 @@ public class FileManager {
 		}
 		fileScanner.close();
 		
-		PVS.verifyRowsAndColumns(puzzleToLoad);
+		PVS.verifyPuzzle(puzzleToLoad);
 	}
 	
 	public int[][] setPuzzle() {
@@ -111,7 +111,7 @@ public class FileManager {
 	}
 	
 	public void puzzleToBeVerified() {
-		PVS.verifyRowsAndColumns(puzzleToLoad);
+		PVS.verifyPuzzle(puzzleToLoad);
 	}
 	
 	public void savePuzzleToFile(int[][] puzzleToSave) throws IOException {

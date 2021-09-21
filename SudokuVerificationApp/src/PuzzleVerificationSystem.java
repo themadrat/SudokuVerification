@@ -5,9 +5,6 @@ public class PuzzleVerificationSystem {
 	private boolean puzzleIsValid = true;																			//Declaration of a private global scope boolean.
 																													//This boolean will be used for the accessor method
 																													//that will share the validity of the puzzles
-
-	private boolean rowsAndCoulmnsAreValid = false;
-	private boolean blocksAreValid = false;
 	
 	private static int[][] validNumbers = getMaxValues();
 	
@@ -48,7 +45,7 @@ public class PuzzleVerificationSystem {
 		return numbersToFind;																						//Returns the method scope 2D array to the method
 	}
 	
-	public void verifyRowsAndColumns(int[][] puzzleToValidate) {
+	public void verifyPuzzle(int[][] puzzleToValidate) {
 		/* 
 		 * Method:					verifyRows()
 		 * 
@@ -89,7 +86,6 @@ public class PuzzleVerificationSystem {
 		
 		boolean puzzleIsValid = true;
 		
-		
 		while(rows < 8 && rows != 9 && puzzleIsValid) {
 			if (columnIndex == 9) {
 				rows++;
@@ -110,7 +106,7 @@ public class PuzzleVerificationSystem {
 			if (oneAppears > 1 || twoAppears > 1 || threeAppears > 1 || fourAppears > 1 || fiveAppears > 1 || sixAppears > 1 || sevenAppears > 1 || eightAppears > 1 || nineAppears > 1) {
 				puzzleIsValid = false;
 			}
-			if (puzzleToValidate[rows][columnIndex] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex < 8) {	
+			if (puzzleToValidate[rows][columnIndex] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex < 8) {
 				numberDuplicateDetection = puzzleToValidate[rows][columnIndex];
 				if (numberDuplicateDetection == 1) {
 					oneAppears++;
@@ -149,42 +145,12 @@ public class PuzzleVerificationSystem {
 				puzzleIsValid = false;
 			}
 			if (puzzleIsValid) {
-				rowsAndCoulmnsAreValid = true;
-				validateBlocks(puzzleToValidate);
+				setResult(true);
 			}
 			else {
-				rowsAndCoulmnsAreValid = false;
+				setResult(false);
 			}
 		}
-	}
-	
-	private void validateBlocks(int[][] puzzleToValidate) {
-		int[][] block1 = new int[3][3];
-		int[][] block2 = new int[3][3];
-		int[][] block3 = new int[3][3];
-		int[][] block4 = new int[3][3];
-		int[][] block5 = new int[3][3];
-		int[][] block6 = new int[3][3];
-		int[][] block7 = new int[3][3];
-		int[][] block8 = new int[3][3];
-		int[][] block9 = new int[3][3];
-		
-		ArrayList<int[][]> blocks =new ArrayList<int[][]> ();
-		
-		blocks.add(block1);
-		blocks.add(block2);
-		blocks.add(block3);
-		blocks.add(block4);
-		blocks.add(block5);
-		blocks.add(block6);
-		blocks.add(block7);
-		blocks.add(block8);
-		blocks.add(block9);
-		
-		int blockCounter = 0;
-		
-		
-		boolean puzzleIsValid = true;
 	}
 		
 	
@@ -206,7 +172,7 @@ public class PuzzleVerificationSystem {
 		 * 							09/18/2021	Jared Shaddick	Implemented 2 Of The 3 Results
 		 * 														From The Validation Methods
 		 */
-		if (rowsAndCoulmnsAreValid && blocksAreValid && validPuzzle) {
+		if (validPuzzle) {
 			puzzleIsValid = true;
 		}
 		else {

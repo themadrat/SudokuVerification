@@ -286,7 +286,7 @@ public class UserInterfaceV3 extends JFrame {
 				rowCounter++;
 				columnCounter = 0;
 			}
-			PVS.verifyRowsAndColumns(puzzleFromText);
+			PVS.verifyPuzzle(puzzleFromText);
 		}
 	}
 	
