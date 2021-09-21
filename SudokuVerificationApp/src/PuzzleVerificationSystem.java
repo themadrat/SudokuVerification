@@ -1,9 +1,17 @@
 public class PuzzleVerificationSystem {
 	
-	private boolean puzzleIsValid = true;																			//Declaration of a private global scope boolean.
+	private boolean puzzleIsValid;																					//Declaration of a private global scope boolean.
 																													//This boolean will be used for the accessor method
 																													//that will share the validity of the puzzles
 	
+	public boolean isPuzzleIsValid() {
+		return puzzleIsValid;
+	}
+
+	public void setPuzzleIsValid(boolean puzzleIsValid) {
+		this.puzzleIsValid = puzzleIsValid;
+	}
+
 	private static int[][] validNumbers = getMaxValues();
 	
 	private static int[][] getMaxValues() {
@@ -57,14 +65,11 @@ public class PuzzleVerificationSystem {
 		 * Modifications:			Date:		Name:			Modification:
 		 * 							09/15/2021	Jared Shaddick	Method Created
 		 * 							09/15/2021	Jared Shaddick	Block Comments Created
-		 * 							09/18/2021	Jared Shaddick	The Row/Column Validation
-		 * 														Algorithm Has Been Completed
-		 * 							09/19/2021	Jared Shaddick	Added 3rd Part Of Validation
-		 * 														Algorithm
-		 * 							09/20/2021	Jared Shaddick	Fixed Parts Of The Row/Column
-		 * 														Checker
-		 * 							09/21/2021	Jared Shaddick	Fixed More Parts Of The Row/Column
-		 * 														Checker
+		 * 							09/18/2021	Jared Shaddick	The Validation Algorithm 
+		 * 														Has Been Completed
+		 * 							09/20/2021	Jared Shaddick	Fixed Parts Of The Validation Method
+		 * 							09/21/2021	Jared Shaddick	Fixed More Parts Of The Validation Method
+		 * 							09/21/2021	Jared Shaddick	No Further Changes Necessary
 		 */
 		int numberDuplicateDetection;
 		int findColumnIndex = 0;
@@ -82,12 +87,11 @@ public class PuzzleVerificationSystem {
 		int eightAppears = 0;
 		int nineAppears = 0;
 		
-		boolean puzzleIsValid = true;
+		int rowCounter = 0;
 		
-		while(rows < 8 && rows != 9 && puzzleIsValid) {
-			if (columnIndex == 9) {
-				rows++;
-			}
+		boolean rowsValid = true;
+		
+		while(rows < 8 && rows != 9 && rowsValid) {
 			if(oneAppears == 1 && twoAppears == 1 && threeAppears == 1 && fourAppears == 1 && fiveAppears == 1 && sixAppears == 1 && sevenAppears == 1 && eightAppears == 1 && nineAppears == 1) {
 				oneAppears = 0;
 				twoAppears = 0;
@@ -100,9 +104,7 @@ public class PuzzleVerificationSystem {
 				nineAppears = 0;
 				findColumnIndex = 0;
 				columnIndex = 0;
-			}
-			if (oneAppears > 1 || twoAppears > 1 || threeAppears > 1 || fourAppears > 1 || fiveAppears > 1 || sixAppears > 1 || sevenAppears > 1 || eightAppears > 1 || nineAppears > 1) {
-				puzzleIsValid = false;
+				rowCounter++;
 			}
 			if (puzzleToValidate[rows][columnIndex] == validNumbers[findRowIndex][findColumnIndex] || findColumnIndex < 8) {
 				numberDuplicateDetection = puzzleToValidate[rows][columnIndex];
@@ -133,69 +135,120 @@ public class PuzzleVerificationSystem {
 				if (numberDuplicateDetection == 9) {
 					nineAppears++;
 				}
-				columnIndex++;
 				findColumnIndex = 0;
+			}
+			if (oneAppears > 1 || twoAppears > 1 || threeAppears > 1 || fourAppears > 1 || fiveAppears > 1 || sixAppears > 1 || sevenAppears > 1 || eightAppears > 1 || nineAppears > 1) {
+				rowsValid = false;
 			}
 			if (puzzleToValidate[rows][columnIndex] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex < 8) {
 				findColumnIndex++;
 			}
 			if (puzzleToValidate[rows][columnIndex] != validNumbers[findRowIndex][findColumnIndex] && findColumnIndex == 8) {
-				puzzleIsValid = false;
+				rowsValid = false;
 			}
-			if (puzzleIsValid) {
-				setResult(true);
+			if (rowCounter == 8) {
+				rowsValid = true;
 			}
-			else {
-				setResult(false);
+			columnIndex++;
+			if (columnIndex == 9) {
+				rows++;
+				columnIndex = 0;
 			}
 		}
-	}
+		if(rowsValid) {
+			checkRows(rowsValid, puzzleToValidate);
+		}
 		
-	
-	public void setResult(boolean validPuzzle) {
-		/*
-		 * Method:					getResult()
-		 * 
-		 * Method Parameters:		boolean isPuzzleValid
-		 * 
-		 * Method Return:			Void
-		 * 
-		 * Synopsis:				This method serves as the accessor method
-		 * 							for other classes to read this information.
-		 * 
-		 * Modifications:			Date:		Name:			Modification:
-		 * 							09/17/2021	Jared Shaddick	Method Created
-		 * 							09/17/2021	Jared Shaddick	Block Comments Created
-		 * 							09/17/2021	Jared Shaddick	In-Line Comments Created
-		 * 							09/18/2021	Jared Shaddick	Implemented 2 Of The 3 Results
-		 * 														From The Validation Methods
-		 */
-		if (validPuzzle) {
-			puzzleIsValid = true;
-		}
-		else {
-			puzzleIsValid = false;
-		}
-	}
-
-	public boolean isPuzzleValid() {
-		/*
-		 * Method:					isPuzzleValid()
-		 * 
-		 * Method Parameters:		None
-		 * 
-		 * Method Return:			boolean
-		 * 
-		 * Synopsis:				This Method serves to allow other classes to access
-		 * 							the information on if a puzzle is valid
-		 * 
-		 * Modifications:			Date:		Name:			Modification:
-		 * 							09/17/2021	Jared Shaddick	Method Created
-		 * 							09/17/2021	Jared Shaddick	Method Finished
-		 * 							09/18/2021	Jared Shaddick	Block Comments Created
-		 * 							09/18/2021	Jared Shaddick	In-Line Comments Created					
-		 */
-		return puzzleIsValid;																//Returns the variable to the accessor method
 	}
 	
+	private void checkRows(boolean rowsValid, int[][] puzzleToValidate) {
+		
+		int numberDuplicateDetection;
+		int findColumnIndex = 0;
+		int findRowIndex = 0;
+		int rows = 0;
+		int columnIndex = 0;
+		
+		int oneAppears = 0;
+		int twoAppears = 0;
+		int threeAppears = 0;
+		int fourAppears = 0;
+		int fiveAppears = 0;
+		int sixAppears = 0;
+		int sevenAppears = 0;
+		int eightAppears = 0;
+		int nineAppears = 0;
+		
+		int columnCounter = 0;
+		
+		boolean columnsValid = true;
+		
+		if (rowsValid) {
+			while(columnIndex < 8 && columnIndex != 9 && columnsValid) {
+				if(oneAppears == 1 && twoAppears == 1 && threeAppears == 1 && fourAppears == 1 && fiveAppears == 1 && sixAppears == 1 && sevenAppears == 1 && eightAppears == 1 && nineAppears == 1) {
+					oneAppears = 0;
+					twoAppears = 0;
+					threeAppears = 0;
+					fourAppears = 0;
+					fiveAppears = 0;
+					sixAppears = 0;
+					sevenAppears = 0;
+					eightAppears = 0;
+					nineAppears = 0;
+					findRowIndex = 0;
+					rows = 0;
+					columnCounter++;
+				}
+				if (puzzleToValidate[rows][columnIndex] == validNumbers[findRowIndex][findColumnIndex] || findRowIndex < 8) {
+					numberDuplicateDetection = puzzleToValidate[rows][columnIndex];
+					if (numberDuplicateDetection == 1) {
+						oneAppears++;
+					}
+					if (numberDuplicateDetection == 2) {
+						twoAppears++;
+					}
+					if (numberDuplicateDetection == 3) {
+						threeAppears++;
+					}
+					if (numberDuplicateDetection == 4) {
+						fourAppears++;
+					}
+					if (numberDuplicateDetection == 5) {
+						fiveAppears++;
+					}
+					if (numberDuplicateDetection == 6) {
+						sixAppears++;
+					}
+					if (numberDuplicateDetection == 7) {
+						sevenAppears++;
+					}
+					if (numberDuplicateDetection == 8) {
+						eightAppears++;
+					}
+					if (numberDuplicateDetection == 9) {
+						nineAppears++;
+					}
+					findRowIndex = 0;
+				}
+				if (oneAppears > 1 || twoAppears > 1 || threeAppears > 1 || fourAppears > 1 || fiveAppears > 1 || sixAppears > 1 || sevenAppears > 1 || eightAppears > 1 || nineAppears > 1) {
+					columnsValid = false;
+				}
+				if (columnCounter == 8) {
+					rowsValid = true;
+				}
+				if (puzzleToValidate[rows][columnIndex] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex < 8) {
+					findRowIndex++;
+				}
+				if (puzzleToValidate[rows][columnIndex] != validNumbers[findRowIndex][findColumnIndex] && findRowIndex == 8) {
+					columnsValid = false;
+				}
+				rows++;
+				if (rows == 9) {
+					columnIndex++;
+					rows = 0;
+				}
+			}
+			setPuzzleIsValid(columnsValid);
+		}
+	}
 }

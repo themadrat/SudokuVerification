@@ -7,7 +7,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 import java.awt.event.ActionEvent;
@@ -27,21 +30,20 @@ public class UserInterfaceV3 extends JFrame {
 	private JLabel lblVerificationDisplay;
 	private JButton btnSave;
 	private JTextArea textAreaSudoku;
-	
-	private FileManager FM = new FileManager();
-	private PuzzleVerificationSystem PVS = new PuzzleVerificationSystem();
 	private JTextField textFieldDirectory;
 	
 	private ImageIcon checkMark = new ImageIcon("Assets/CheckMark.png");
 	private ImageIcon XMark = new ImageIcon("Assets/X-Mark.png");
 	
 	private Scanner textScanner;
-
-	private JTextField textFieldSaveDirectory;
 	
 	private boolean puzzleIsSufficient;
 	
 	private static int[][] puzzleFromText;
+	
+	private FileManager FM = new FileManager();
+	private PuzzleVerificationSystem PVS = new PuzzleVerificationSystem();
+
 	/**
 	 * Launch the application.
 	 */
@@ -104,7 +106,11 @@ public class UserInterfaceV3 extends JFrame {
 				int[][] puzzle1;
 				int rowCounter = 0;
 				int columnCounter = 0;
-				FM.loadPuzzleFile(textFieldDirectory.getText());
+				try {
+					FM.loadPuzzleFile(textFieldDirectory.getText());
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
 				textAreaSudoku.setEnabled(true);
 				puzzle1 = FM.setPuzzle();
 				while (rowCounter < 9) {
@@ -115,7 +121,7 @@ public class UserInterfaceV3 extends JFrame {
 					rowCounter++;
 					columnCounter = 0;
 				}
-				PVS.isPuzzleValid();
+				PVS.verifyPuzzle(puzzle1);
 			}
 		});
 		btnSubmitDirectory.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -126,6 +132,8 @@ public class UserInterfaceV3 extends JFrame {
 		btnSubmitPuzzle = new JButton("Submit Puzzles");
 		btnSubmitPuzzle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lblVerificationDisplay.setEnabled(true);
+				textAreaSudoku.setEditable(false);
 				sufficientPuzzle();
 			}
 		});
@@ -177,13 +185,6 @@ public class UserInterfaceV3 extends JFrame {
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel.setBounds(59, 430, 655, 25);
 		contentPane.add(lblNewLabel);
-		
-		textFieldSaveDirectory = new JTextField();
-		textFieldSaveDirectory.setEnabled(false);
-		textFieldSaveDirectory.setEditable(false);
-		textFieldSaveDirectory.setColumns(10);
-		textFieldSaveDirectory.setBounds(82, 361, 605, 20);
-		contentPane.add(textFieldSaveDirectory);
 		
 		JButton btnNewButton = new JButton("Get Result");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -238,10 +239,8 @@ public class UserInterfaceV3 extends JFrame {
 			detectedRows++;
 		}
 		if (!enoughColumns || !enoughColumns) {
-			PVS.setResult(false);
-			if (PVS.isPuzzleValid() == false) {
-				lblVerificationDisplay.setIcon(XMark);
-			}
+			PVS.setPuzzleIsValid(false);
+			JOptionPane.showMessageDialog(null, "ERROR: Puzzle is not of correct size");
 			return false;
 		}
 		else {
@@ -303,10 +302,10 @@ public class UserInterfaceV3 extends JFrame {
 		 * 						information to display the results to the
 		 * 						user using lblVerificationDisplay1
 		 */
-		if (PVS.isPuzzleValid() == false) {
+		if (PVS.isPuzzleIsValid() == false) {
 			lblVerificationDisplay.setIcon(XMark);
 		}
-		if (PVS.isPuzzleValid() == true) {
+		if (PVS.isPuzzleIsValid() == true) {
 			lblVerificationDisplay.setIcon(checkMark);
 		}
 	}

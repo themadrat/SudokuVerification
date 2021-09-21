@@ -14,7 +14,7 @@ public class FileManager {
 	
 
 	
-	public void loadPuzzleFile(String fileLocation) {
+	public void loadPuzzleFile(String fileLocation) throws FileNotFoundException {
 		/*
 		 * Method:				loadPuzzleFile()
 		 * 
@@ -108,10 +108,6 @@ public class FileManager {
 		 * 						09/18/2021	Jared Shaddick	Block Comments Created
 		 */
 		return puzzleToLoad;
-	}
-	
-	public void puzzleToBeVerified() {
-		PVS.verifyPuzzle(puzzleToLoad);
 	}
 	
 	public void savePuzzleToFile(int[][] puzzleToSave) throws IOException {
