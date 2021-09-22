@@ -156,7 +156,7 @@ public class UserInterfaceV3 extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
-					FM.savePuzzleToFile(puzzleFromText);
+					FM.savePuzzleToFile(puzzleFromText);														//try-catch used to pass a puzzle to the file manager for saving
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -310,6 +310,10 @@ public class UserInterfaceV3 extends JFrame {
 		 * 						from the isPuzzleValid method and use that
 		 * 						information to display the results to the
 		 * 						user using lblVerificationDisplay1
+		 * 
+		 * Modifications:		Date:		Name:			Modification:
+		 * 						09/19/2021	Jared Shaddick	Method Set Up
+		 * 						09/21/2021	Jared Shaddick	Block Comments Created
 		 */
 		if (PVS.isPuzzleIsValid() == false) {
 			lblVerificationDisplay.setIcon(XMark);

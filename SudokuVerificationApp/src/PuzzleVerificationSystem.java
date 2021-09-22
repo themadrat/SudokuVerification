@@ -57,7 +57,7 @@ public class PuzzleVerificationSystem {
 		 * 
 		 * Method Parameters:		None
 		 * 
-		 * Method Return:			boolean
+		 * Method Return:			void
 		 * 
 		 * Synopsis:				This method serves as the means in which each row of the
 		 * 							Sudoku puzzle is checked and verified.
@@ -65,7 +65,7 @@ public class PuzzleVerificationSystem {
 		 * Modifications:			Date:		Name:			Modification:
 		 * 							09/15/2021	Jared Shaddick	Method Created
 		 * 							09/15/2021	Jared Shaddick	Block Comments Created
-		 * 							09/18/2021	Jared Shaddick	The Validation Algorithm 
+		 * 							09/18/2021	Jared Shaddick	The Row Validation Algorithm 
 		 * 														Has Been Completed
 		 * 							09/20/2021	Jared Shaddick	Fixed Parts Of The Validation Method
 		 * 							09/21/2021	Jared Shaddick	Fixed More Parts Of The Validation Method
@@ -156,12 +156,31 @@ public class PuzzleVerificationSystem {
 			}
 		}
 		if(rowsValid) {
-			checkRows(rowsValid, puzzleToValidate);
+			checkColumns(rowsValid, puzzleToValidate);
 		}
 		
 	}
 	
-	private void checkRows(boolean rowsValid, int[][] puzzleToValidate) {
+	private void checkColumns(boolean rowsValid, int[][] puzzleToValidate) {
+		/* 
+		 * Method:					verifyColumns()
+		 * 
+		 * Method Parameters:		None
+		 * 
+		 * Method Return:			void
+		 * 
+		 * Synopsis:				This method serves as the means in which each column of the
+		 * 							Sudoku puzzle is checked and verified.
+		 * 
+		 * Modifications:			Date:		Name:			Modification:
+		 * 							09/15/2021	Jared Shaddick	Method Created
+		 * 							09/15/2021	Jared Shaddick	Block Comments Created
+		 * 							09/18/2021	Jared Shaddick	The Column Validation Algorithm 
+		 * 														Has Been Completed
+		 * 							09/20/2021	Jared Shaddick	Fixed Parts Of The Validation Method
+		 * 							09/21/2021	Jared Shaddick	Fixed More Parts Of The Validation Method
+		 * 							09/21/2021	Jared Shaddick	No Further Changes Necessary
+		 */
 		
 		int numberDuplicateDetection;
 		int findColumnIndex = 0;
