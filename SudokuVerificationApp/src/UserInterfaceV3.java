@@ -104,17 +104,17 @@ public class UserInterfaceV3 extends JFrame {
 		btnSubmitDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lblVerificationDisplay.setEnabled(true);
-				int[][] puzzle1;
+				int[][] puzzle1;																					//variable used to store puzzle from file
 				int rowCounter = 0;
 				int columnCounter = 0;
-				try {
+				try {																								//try-catch that attempts to get a file from file manager
 					FM.loadPuzzleFile(textFieldDirectory.getText());
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
 				textAreaSudoku.setEnabled(true);
 				puzzle1 = FM.setPuzzle();
-				while (rowCounter < 9) {
+				while (rowCounter < 9) {																			//while loop with a nested while used to add the contents of the file into a JTextArea
 					while (columnCounter < 9) {
 						textAreaSudoku.append(String.valueOf(puzzle1[rowCounter][columnCounter]) + " ");
 						columnCounter++;
